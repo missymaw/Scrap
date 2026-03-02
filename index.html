@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=5,user-scalable=yes,viewport-fit=cover"/>
+<meta name="theme-color" content="#0c111d"/>
+<meta name="color-scheme" content="dark"/>
+<meta name="description" content="iKROX — Inteligencia de Precios y Gestión de Proveedores"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="iKROX"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="application-name" content="iKROX"/>
+<meta name="msapplication-tap-highlight" content="no"/>
+<meta name="format-detection" content="telephone=no"/>
+<title>iKROX — Inteligencia de Precios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--bg:#0c111d;--sf:#151c2c;--sf2:#1a2235;--br:rgba(255,255,255,.06);--tx:#f1f5f9;--tx2:#94a3b8;--tx3:#64748b;--pr:#6366f1;--pr2:#818cf8;--ac:#22d3ee;--ok:#34d399;--wn:#fbbf24;--dn:#f87171;--rd:14px;--ft:'Outfit',sans-serif;--fm:'JetBrains Mono',monospace;--fh:'Plus Jakarta Sans',sans-serif}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;scroll-behavior:smooth}
+body{font-family:var(--ft);background:var(--bg);color:var(--tx);min-height:100vh;min-height:100dvh;overflow-x:hidden}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(99,102,241,.25);border-radius:2px}
+::selection{background:rgba(99,102,241,.3)}
+input,button,select,textarea{font-family:inherit;font-size:inherit}
+button{cursor:pointer}
+a{color:var(--ac);text-decoration:none}
+@media print{body{display:none!important}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+@keyframes glow{0%,100%{box-shadow:0 0 15px rgba(99,102,241,.2)}50%{box-shadow:0 0 30px rgba(99,102,241,.5)}}
+@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+@keyframes slideIn{from{transform:translateX(-100%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes dotPulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+/* LOADING */
+#LS{position:fixed;inset:0;z-index:99999;background:linear-gradient(135deg,#0c111d 0%,#1a1040 50%,#0c111d 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .6s ease}
+#LS.gone{opacity:0;pointer-events:none}
+.ld-logo{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,var(--pr),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;animation:pulse 2s ease-in-out infinite;box-shadow:0 0 40px rgba(99,102,241,.3);font-family:var(--fh)}
+.ld-bar{width:140px;height:3px;margin-top:20px;background:rgba(255,255,255,.04);border-radius:2px;overflow:hidden}
+.ld-fill{height:100%;width:40%;background:linear-gradient(90deg,var(--pr),var(--ac));border-radius:2px;animation:shimmer 2s linear infinite;background-size:200% 100%}
+.ld-txt{margin-top:12px;font-size:.7rem;color:var(--tx3);letter-spacing:1px;text-transform:uppercase}
+
+/* PWA */
+#PWA{position:fixed;inset:0;z-index:9998;background:linear-gradient(160deg,#0c111d,#1a1040,#0c111d);display:none;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem;animation:fadeIn .5s ease}
+#PWA.show{display:flex}
+.pi-logo{width:88px;height:88px;border-radius:22px;background:linear-gradient(135deg,var(--pr),#8b5cf6);display:flex;align-items:center;justify-content:center;margin-bottom:1.5rem;animation:float 3s ease-in-out infinite;box-shadow:0 0 40px rgba(99,102,241,.3);font-size:34px;font-weight:800;color:#fff;font-family:var(--fh)}
+.pi-t{font-size:2rem;font-weight:800;font-family:var(--fh);margin-bottom:.4rem;background:linear-gradient(90deg,#f1f5f9 30%,var(--pr2) 70%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.pi-s{color:var(--tx2);font-size:.9rem;margin-bottom:2rem}
+.pi-feats{display:grid;gap:.65rem;max-width:340px;width:100%}
+.pi-f{display:flex;align-items:center;gap:.7rem;padding:.55rem .9rem;background:rgba(255,255,255,.03);border-radius:12px;border:1px solid var(--br);font-size:.85rem;color:#cbd5e1}
+.pi-f em{font-style:normal;font-size:1.1rem}
+.pi-btns{display:flex;flex-direction:column;gap:.65rem;width:100%;max-width:340px;margin-top:1.5rem}
+.pi-inst{padding:.9rem;border-radius:var(--rd);background:linear-gradient(135deg,var(--pr),#8b5cf6);color:#fff;font-weight:700;font-size:.95rem;border:none;animation:glow 2.5s ease-in-out infinite}
+.pi-skip{padding:.75rem;border-radius:var(--rd);background:rgba(255,255,255,.04);color:var(--tx2);font-weight:500;font-size:.85rem;border:1px solid var(--br)}
+.pi-copy{position:absolute;bottom:1.2rem;color:var(--tx3);font-size:.7rem}
+.pi-ios{text-align:center;max-width:320px;display:none}
+.pi-ios-box{background:rgba(255,255,255,.04);border-radius:16px;padding:1.25rem;margin:1rem 0;font-size:.9rem;line-height:1.8}
+.pi-ios-box .hi{padding:3px 8px;background:rgba(99,102,241,.15);border-radius:8px;font-size:1.1rem}
+
+/* HEADER */
+.hdr{padding:.65rem 1rem;border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;background:rgba(12,17,29,.94);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.hdr-l{display:flex;align-items:center;gap:.65rem;min-width:0}
+.hdr-icon{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--pr),#8b5cf6);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:#fff;font-family:var(--fh);flex-shrink:0}
+.hdr-info{min-width:0}
+.hdr h1{font-size:.9rem;font-weight:700;font-family:var(--fh);color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-sub{font-size:.6rem;color:var(--tx3);display:flex;align-items:center;gap:4px}
+.hdr-sub .dot{width:5px;height:5px;border-radius:50%;background:var(--ok);animation:dotPulse 2s infinite}
+.hdr-r{display:flex;align-items:center;gap:.5rem}
+.hdr-branch{padding:3px 10px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--br);color:var(--tx2);font-size:.7rem;font-weight:500;max-width:100px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hdr-btn{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.04);border:1px solid var(--br);color:var(--tx2);font-size:.9rem;display:flex;align-items:center;justify-content:center;position:relative}
+.hdr-btn .badge{position:absolute;top:-3px;right:-3px;min-width:14px;height:14px;border-radius:7px;background:var(--dn);font-size:8px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#fff;border:2px solid var(--bg);padding:0 2px}
+
+/* TABS */
+.dtabs{padding:.5rem 1rem 0;display:flex;gap:3px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.dtabs::-webkit-scrollbar{display:none}
+@media(max-width:767px){.dtabs{display:none!important}}
+.tab{padding:.45rem .75rem;border-radius:9px;background:transparent;border:1px solid transparent;color:var(--tx3);font-weight:500;font-size:.75rem;display:flex;align-items:center;gap:5px;white-space:nowrap;transition:all .2s}
+.tab:hover{background:rgba(255,255,255,.03)}
+.tab.on{background:rgba(99,102,241,.12);border-color:rgba(99,102,241,.25);color:var(--pr2);font-weight:600}
+.tab em{font-style:normal;font-size:.9rem}
+.tab .cnt{font-size:.6rem;padding:1px 5px;border-radius:5px;background:rgba(255,255,255,.06);color:var(--tx3);margin-left:2px}
+.tab.on .cnt{background:rgba(99,102,241,.15);color:var(--pr2)}
+
+/* BOTTOM NAV */
+.bnav{position:fixed;bottom:0;left:0;right:0;display:grid;grid-template-columns:repeat(5,1fr);padding:4px 2px calc(4px + env(safe-area-inset-bottom,0px));background:rgba(12,17,29,.96);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--br);z-index:200}
+@media(min-width:768px){.bnav{display:none!important}}
+.bn{display:flex;flex-direction:column;align-items:center;gap:1px;background:none;border:none;font-size:.55rem;padding:5px 2px;color:var(--tx3);transition:color .15s;position:relative;font-weight:500}
+.bn.on{color:var(--pr2);font-weight:600}
+.bn em{font-size:1.15rem;font-style:normal;line-height:1.2}
+.bn-dot{position:absolute;top:0;left:50%;transform:translateX(-50%);width:16px;height:2.5px;border-radius:2px;background:var(--pr);box-shadow:0 0 8px rgba(99,102,241,.5)}
+
+/* CONTENT */
+#MC{padding:.75rem 1rem;padding-bottom:72px;min-height:calc(100vh - 90px)}
+@media(min-width:768px){#MC{padding-bottom:1.5rem;padding-left:1.25rem;padding-right:1.25rem}}
+
+/* CARDS */
+.c{background:var(--sf);border-radius:var(--rd);border:1px solid var(--br);padding:1rem;transition:all .25s;position:relative}
+.c.g{border-color:rgba(99,102,241,.2);box-shadow:0 0 20px rgba(99,102,241,.08)}
+.c.k{cursor:pointer}.c.k:hover{border-color:rgba(99,102,241,.15);background:var(--sf2)}.c.k:active{transform:scale(.985)}
+.c.my{border-color:rgba(99,102,241,.3);background:linear-gradient(135deg,rgba(99,102,241,.06),rgba(139,92,246,.04))}
+.c.tip{background:rgba(52,211,153,.04);border-color:rgba(52,211,153,.12)}
+.c.warn{border-left:3px solid var(--wn)}.c.dng{border-left:3px solid var(--dn)}.c.info{border-left:3px solid var(--ac)}
+
+/* STATS */
+.sg{display:grid;grid-template-columns:repeat(auto-fill,minmax(155px,1fr));gap:.6rem;margin-bottom:1.25rem}
+@media(max-width:380px){.sg{grid-template-columns:1fr 1fr}}
+.si{display:flex;align-items:center;gap:.6rem;padding:.85rem}
+.si-i{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+.si-v{font-size:1.35rem;font-weight:800;font-family:var(--fm);color:var(--tx);line-height:1}
+.si-l{font-size:.65rem;color:var(--tx3);margin-top:2px;line-height:1.2}
+.si-c{font-size:.62rem;margin-top:2px;font-weight:600}
+
+/* HEALTH BAR */
+.hb{display:flex;align-items:center;gap:6px}
+.hb-t{flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.hb-f{height:100%;border-radius:3px;transition:width .8s ease}
+.hb-v{font-size:.65rem;font-family:var(--fm);min-width:26px;font-weight:600}
+
+/* BADGES */
+.pb{display:inline-flex;align-items:center;gap:2px;padding:1px 7px;border-radius:6px;font-size:.65rem;font-family:var(--fm);font-weight:600}
+.tag{display:inline-flex;padding:2px 8px;border-radius:6px;font-size:.62rem;font-weight:600;letter-spacing:.3px}
+.stk{font-size:.65rem;padding:1px 6px;border-radius:5px;font-weight:500}
+
+/* SECTION */
+.sh{font-size:.78rem;font-weight:600;color:var(--tx3);margin-bottom:.6rem;text-transform:uppercase;letter-spacing:.8px;display:flex;align-items:center;gap:6px}
+.sh2{font-size:1rem;font-weight:700;color:var(--tx);margin-bottom:.75rem;font-family:var(--fh)}
+.sh3{font-size:.85rem;font-weight:600;color:var(--tx2);margin-bottom:.5rem}
+
+/* UTILITY */
+.mono{font-family:var(--fm)}.bold{font-weight:700}
+.gs{display:flex;flex-direction:column;gap:.45rem}
+.gm{display:flex;flex-direction:column;gap:.55rem}
+.fr{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.4rem}
+.fl{display:flex;align-items:center;gap:.5rem}
+.fg{display:flex;gap:.4rem;flex-wrap:wrap}
+.mb05{margin-bottom:.5rem}.mb1{margin-bottom:.85rem}.mb15{margin-bottom:1.25rem}
+.mt05{margin-top:.5rem}.mt1{margin-top:.85rem}
+.pn{font-size:.82rem;font-weight:600;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pm{font-size:.67rem;color:var(--tx3);line-height:1.3}
+.pp{font-family:var(--fm);font-weight:700;color:var(--tx)}
+.dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+/* INPUTS */
+.inp{width:100%;padding:.55rem .7rem;background:rgba(255,255,255,.03);border:1px solid var(--br);border-radius:10px;color:var(--tx);font-size:.82rem;outline:none;transition:border-color .2s}
+.inp:focus{border-color:rgba(99,102,241,.4)}
+.inp::placeholder{color:var(--tx3)}
+.sbar{position:relative;flex:1;min-width:0}
+.sbar-i{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--tx3);font-size:.9rem}
+.sbar .inp{padding-left:2rem}
+
+/* BUTTONS */
+.btn{padding:.5rem 1rem;border-radius:10px;font-weight:600;font-size:.8rem;border:none;transition:all .2s;display:inline-flex;align-items:center;gap:5px}
+.btn:active{transform:scale(.97)}
+.btn-pr{background:linear-gradient(135deg,var(--pr),#8b5cf6);color:#fff}
+.btn-pr:hover{box-shadow:0 0 16px rgba(99,102,241,.3)}
+.btn-sc{background:rgba(255,255,255,.05);border:1px solid var(--br);color:var(--tx2)}
+.btn-ok{background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.2);color:var(--ok)}
+.btn-dn{background:rgba(248,113,113,.1);border:1px solid rgba(248,113,113,.2);color:var(--dn)}
+.btn-sm{padding:3px 10px;font-size:.72rem;border-radius:7px}
+.btn-icon{width:32px;height:32px;border-radius:9px;padding:0;display:flex;align-items:center;justify-content:center;font-size:1rem}
+
+/* BACK */
+.bbtn{background:none;border:none;color:var(--tx2);font-size:.82rem;margin-bottom:.75rem;display:flex;align-items:center;gap:4px;padding:4px 0}
+.bbtn:hover{color:var(--tx)}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);display:none;align-items:flex-end;justify-content:center;padding:0}
+.modal-bg.show{display:flex}
+@media(min-width:768px){.modal-bg{align-items:center;padding:2rem}}
+.modal{background:var(--sf);border-radius:20px 20px 0 0;border:1px solid var(--br);width:100%;max-width:520px;max-height:85vh;overflow-y:auto;animation:fadeUp .3s ease;padding:0}
+@media(min-width:768px){.modal{border-radius:var(--rd)}}
+.modal-h{padding:1rem;border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--sf);z-index:1;border-radius:20px 20px 0 0}
+@media(min-width:768px){.modal-h{border-radius:var(--rd) var(--rd) 0 0}}
+.modal-h h3{font-size:.95rem;font-weight:700;font-family:var(--fh)}
+.modal-close{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid var(--br);color:var(--tx2);display:flex;align-items:center;justify-content:center;font-size:.9rem}
+.modal-body{padding:1rem}
+
+/* PRODUCT DETAIL */
+.pd-hero{padding:1rem;border-radius:var(--rd);background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(139,92,246,.04));border:1px solid rgba(99,102,241,.15);margin-bottom:1rem}
+.pd-ean{font-family:var(--fm);font-size:.7rem;color:var(--pr2);background:rgba(99,102,241,.1);padding:2px 8px;border-radius:6px;display:inline-block;margin-bottom:.5rem}
+.pd-name{font-size:1.15rem;font-weight:700;font-family:var(--fh);color:var(--tx);line-height:1.2;margin-bottom:.3rem}
+.pd-brand{font-size:.8rem;color:var(--tx2);margin-bottom:.75rem}
+.pd-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.5rem}
+.pd-stat{text-align:center;padding:.5rem;background:rgba(255,255,255,.03);border-radius:10px;border:1px solid var(--br)}
+.pd-stat-v{font-family:var(--fm);font-weight:700;font-size:1rem;display:block}
+.pd-stat-l{font-size:.6rem;color:var(--tx3);margin-top:2px;display:block}
+
+/* ORDER PANEL */
+.order-item{display:flex;align-items:center;gap:.5rem;padding:.5rem;background:rgba(255,255,255,.02);border-radius:10px;border:1px solid var(--br)}
+.order-qty{width:50px;text-align:center;padding:4px;border-radius:7px;background:rgba(255,255,255,.04);border:1px solid var(--br);color:var(--tx);font-family:var(--fm);font-size:.8rem}
+.order-summary{padding:.75rem;background:linear-gradient(135deg,rgba(99,102,241,.06),rgba(34,211,238,.04));border-radius:var(--rd);border:1px solid rgba(99,102,241,.15)}
+
+/* TABLE */
+.tbl{width:100%;border-collapse:collapse;font-size:.78rem}
+.tbl th{text-align:left;padding:.5rem;color:var(--tx3);font-weight:600;font-size:.68rem;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--br)}
+.tbl td{padding:.45rem .5rem;border-bottom:1px solid rgba(255,255,255,.03);vertical-align:middle}
+.tbl tr:hover td{background:rgba(255,255,255,.02)}
+
+/* CHIP SELECT */
+.chips{display:flex;gap:.35rem;flex-wrap:wrap}
+.chip{padding:3px 10px;border-radius:8px;font-size:.7rem;font-weight:500;background:rgba(255,255,255,.04);border:1px solid var(--br);color:var(--tx2);cursor:pointer;transition:all .15s}
+.chip.on{background:rgba(99,102,241,.12);border-color:rgba(99,102,241,.3);color:var(--pr2)}
+.chip:active{transform:scale(.95)}
+
+/* EMPTY STATE */
+.empty{text-align:center;padding:2.5rem 1rem;color:var(--tx3)}
+.empty em{font-size:2.5rem;font-style:normal;display:block;margin-bottom:.75rem}
+.empty p{font-size:.85rem;max-width:280px;margin:0 auto .75rem;line-height:1.4}
+
+/* LOCATION */
+.loc-banner{padding:.6rem .8rem;border-radius:10px;background:rgba(34,211,238,.06);border:1px solid rgba(34,211,238,.12);display:flex;align-items:center;gap:.5rem;font-size:.78rem;color:#67e8f9;margin-bottom:.75rem;cursor:pointer}
+.loc-banner em{font-style:normal;font-size:1rem}
+
+/* RESPONSIVE */
+@media(min-width:1024px){
+  .sg{grid-template-columns:repeat(4,1fr)}
+  #MC{max-width:1100px;margin:0 auto}
+}
+</style>
+</head>
+<body>
+<div id="LS"><div class="ld-logo">iK</div><div class="ld-bar"><div class="ld-fill"></div></div><div class="ld-txt">Cargando sistema</div></div>
+<div id="PWA">
+<div class="pi-logo">iK</div>
+<div class="pi-t">iKROX</div>
+<div class="pi-s">Tu negocio. Inteligente.</div>
+<div class="pi-ios">
+<p style="font-size:1.05rem;font-weight:600;margin-bottom:1rem">Instala iKROX en tu dispositivo</p>
+<div class="pi-ios-box">① Toca <span class="hi">⬆️</span> en la barra de Safari<br/>② Selecciona "Agregar a inicio" <span class="hi">➕</span></div>
+</div>
+<div id="pwaFeats" class="pi-feats">
+<div class="pi-f"><em>⚡</em>Acceso instantáneo desde tu pantalla</div>
+<div class="pi-f"><em>📡</em>Funciona sin conexión a internet</div>
+<div class="pi-f"><em>🔔</em>Alertas inteligentes de precios</div>
+<div class="pi-f"><em>📍</em>Detecta competencia cercana</div>
+<div class="pi-f"><em>📦</em>Genera pedidos por proveedor</div>
+</div>
+<div class="pi-btns">
+<button class="pi-inst" id="pwaIB" style="display:none" onclick="pwaInstall()">⚡ INSTALAR IKROX</button>
+<button class="pi-skip" onclick="pwaDismiss()">Continuar en navegador →</button>
+</div>
+<p class="pi-copy">© 2026 iKROX Technologies / Mawddi</p>
+</div>
+<div id="APP" style="display:none">
+<header class="hdr">
+<div class="hdr-l">
+<div class="hdr-icon">iK</div>
+<div class="hdr-info"><h1 id="hdrTitle">Inteligencia de Precios</h1><div class="hdr-sub"><span class="dot"></span> San Blas — Tlapacoyan · <span id="hdrTime"></span></div></div>
+</div>
+<div class="hdr-r">
+<select class="hdr-branch" id="branchSel" onchange="switchBranch(this.value)"><option value="SB1">San Blas — Matriz</option><option value="SB2">Sucursal 2 (próx.)</option></select>
+<button class="hdr-btn" onclick="showNotifs()" title="Notificaciones">🔔<span class="badge" id="notifBadge">5</span></button>
+<button class="hdr-btn" onclick="showSettings()" title="Configuración">⚙️</button>
+</div>
+</header>
+<div class="dtabs" id="DT"></div>
+<div id="MC"></div>
+<nav class="bnav" id="BN"></nav>
+</div>
+<div class="modal-bg" id="modalBg" onclick="closeModal(event)"><div class="modal" id="modalBox" onclick="event.stopPropagation()"><div class="modal-h"><h3 id="modalTitle"></h3><button class="modal-close" onclick="hideModal()">✕</button></div><div class="modal-body" id="modalBody"></div></div></div>
+<script>
+(function(){"use strict";
+/* ═══════════════════════════════════════════════════════════════
+   iKROX — Inteligencia de Precios v2.0
+   © 2026 iKROX Technologies / Mawddi
+   Módulo 2 + 3 + 4 + 7 fusionados — Production Build
+   ═══════════════════════════════════════════════════════════════ */
+
+// ═══ REAL DATA — Based on SAV dbSanBlas schema ═══
+// Products mapped from: tArticulo + tArticuloReferencia + tArticuloPrecio + nadroart
+var DB = {
+products: [
+{id:'ART001',ean:'7501349023710',clave:'000101',name:'Losartán Potásico 50mg c/30 tab',desc:'Antagonista de los receptores de angiotensina II. Tratamiento de hipertensión arterial.',indic:'Hipertensión arterial, nefropatía diabética, insuficiencia cardíaca.',contra:'Embarazo, lactancia, hipersensibilidad al losartán.',brand:'Bayer',lab:'BAYER DE MEXICO',family:'Cardiovascular',fam_clave:'CV01',clase:'MEDICAMENTO',ssa:'010.000.2157',sat:'50104400',pres:'CAJA C/30 TABLETAS',iva:0,ieps:0,peso:.08,vol:.15,refrig:false,receta:false,generico:false,
+mp:89.50,mc:52.30,pfarm:85.00,ppub:92.50,margen:41.56,util:37.20,desc_prov:2.5,stock:12,stockMin:15,stockMax:60,reorden:20,ubicacion:'A1-03',lote:'LT2026A',caduc:'2027-06-15',fechaMod:'2026-02-28',
+comp:[{s:'F. Guadalajara',p:82.50,st:1,q:30,url:'https://www.farmaciasguadalajara.com/losartan'},{s:'F. del Ahorro',p:85.00,st:1,q:45,url:'https://www.fahorro.com/losartan'},{s:'Walmart',p:76.90,st:1,q:null,url:'https://www.walmart.com.mx/losartan'},{s:'F. Benavides',p:92.00,st:1,q:20},{s:'F. Similares',p:69.00,st:1,q:null},{s:'Mercado Libre',p:78.50,st:1,q:null,url:'https://www.mercadolibre.com.mx/losartan'}],
+prov:[{s:'NADRO',code:'NAD',c:48.50,lista:52.00,descuento:6.7,bonif:0,neto:48.50,disp:1,multiplo:1,email:'pedidos@nadro.com.mx',tel:'800-737-6276',dias_resurt:2},{s:'FANASA',code:'FAN',c:50.80,lista:54.00,descuento:5.9,bonif:0,neto:50.80,disp:1,multiplo:3,email:'ventas@fanasa.com',tel:'55-5089-1700',dias_resurt:3},{s:'BIRMEX',code:'BIR',c:51.20,lista:55.00,descuento:6.9,bonif:0,neto:51.20,disp:0,multiplo:1,email:null,tel:null,dias_resurt:5}],
+hist:[{f:'2026-01',p:91.50},{f:'2026-02',p:89.50},{f:'2025-12',p:93.00},{f:'2025-11',p:93.00},{f:'2025-10',p:90.00}]},
+
+{id:'ART002',ean:'7501943401417',clave:'000203',name:'Omeprazol 20mg c/28 cápsulas',desc:'Inhibidor de bomba de protones. Reduce la producción de ácido gástrico.',indic:'Úlcera gástrica, reflujo gastroesofágico (ERGE), síndrome de Zollinger-Ellison.',contra:'Hipersensibilidad al omeprazol o benzimidazoles sustituidos.',brand:'Medix',lab:'LABORATORIOS MEDIX',family:'Gastrointestinal',fam_clave:'GI01',clase:'MEDICAMENTO',ssa:'010.000.2107',sat:'50104400',pres:'CAJA C/28 CAPSULAS',iva:0,ieps:0,peso:.06,vol:.12,refrig:false,receta:false,generico:true,
+mp:145.00,mc:78.50,pfarm:138.00,ppub:152.00,margen:45.86,util:66.50,desc_prov:3.2,stock:25,stockMin:20,stockMax:80,reorden:30,ubicacion:'B2-07',lote:'OM2026B',caduc:'2027-09-30',fechaMod:'2026-02-25',
+comp:[{s:'F. del Ahorro',p:128.00,st:1,q:50},{s:'F. Guadalajara',p:135.50,st:1,q:15},{s:'Walmart',p:139.00,st:0,q:0},{s:'F. Benavides',p:155.00,st:1,q:35},{s:'F. Similares',p:98.00,st:1,q:null},{s:'Mercado Libre',p:119.00,st:1,q:null}],
+prov:[{s:'NADRO',code:'NAD',c:72.00,lista:78.00,descuento:7.7,bonif:0,neto:72.00,disp:1,multiplo:1,email:'pedidos@nadro.com.mx',tel:'800-737-6276',dias_resurt:2},{s:'EQUILIBRIO',code:'EQU',c:74.30,lista:80.00,descuento:7.1,bonif:0,neto:74.30,disp:1,multiplo:2,email:'pedidos@equilibrio.com.mx',tel:'800-900-3400',dias_resurt:2},{s:'CITYFARMA',code:'CTF',c:76.10,lista:82.00,descuento:7.2,bonif:1.5,neto:74.82,disp:1,multiplo:1,email:'ventas@cityfarma.com',tel:'55-1234-5678',dias_resurt:4}],
+hist:[{f:'2026-01',p:148.00},{f:'2026-02',p:145.00},{f:'2025-12',p:150.00},{f:'2025-11',p:152.00},{f:'2025-10',p:148.00}]},
+
+{id:'ART003',ean:'7501075712507',clave:'000305',name:'Paracetamol 500mg c/20 tabletas',desc:'Analgésico y antipirético. Inhibe la síntesis de prostaglandinas a nivel central.',indic:'Dolor leve a moderado, fiebre, cefalea, dolor dental, dolor muscular.',contra:'Insuficiencia hepática grave, hipersensibilidad.',brand:'Tempra',lab:'GENOMMA LAB',family:'Analgésicos',fam_clave:'AN01',clase:'MEDICAMENTO OTC',ssa:'010.000.0104',sat:'50104400',pres:'CAJA C/20 TABLETAS',iva:0,ieps:0,peso:.04,vol:.08,refrig:false,receta:false,generico:false,
+mp:35.00,mc:15.20,pfarm:32.00,ppub:38.00,margen:56.58,util:19.80,desc_prov:5.0,stock:80,stockMin:40,stockMax:200,reorden:60,ubicacion:'C1-01',lote:'PC2026C',caduc:'2028-03-15',fechaMod:'2026-02-20',
+comp:[{s:'F. Similares',p:22.00,st:1,q:100},{s:'F. del Ahorro',p:28.50,st:1,q:60},{s:'F. Guadalajara',p:32.00,st:1,q:45},{s:'Walmart',p:29.50,st:1,q:null},{s:'F. Benavides',p:38.00,st:1,q:30},{s:'Mercado Libre',p:26.00,st:1,q:null}],
+prov:[{s:'NADRO',code:'NAD',c:12.80,lista:14.50,descuento:11.7,bonif:0,neto:12.80,disp:1,multiplo:6,email:'pedidos@nadro.com.mx',tel:'800-737-6276',dias_resurt:2},{s:'FANASA',code:'FAN',c:13.50,lista:15.00,descuento:10.0,bonif:0,neto:13.50,disp:1,multiplo:12,email:'ventas@fanasa.com',tel:'55-5089-1700',dias_resurt:3},{s:'SCORPION',code:'SCO',c:12.10,lista:13.80,descuento:12.3,bonif:2.0,neto:11.86,disp:1,multiplo:6,email:'ventas@scorpion.com.mx',tel:'800-505-0505',dias_resurt:1}],
+hist:[{f:'2026-01',p:36.00},{f:'2026-02',p:35.00},{f:'2025-12',p:36.50},{f:'2025-11',p:37.00},{f:'2025-10',p:35.00}]},
+
+{id:'ART004',ean:'7501368900112',clave:'000410',name:'Metformina 850mg c/30 tabletas',desc:'Biguanida antidiabética. Reduce la glucosa hepática y mejora sensibilidad a insulina.',indic:'Diabetes mellitus tipo 2, síndrome de ovario poliquístico, resistencia a insulina.',contra:'Insuficiencia renal, acidosis metabólica, cetoacidosis diabética.',brand:'Glucophage',lab:'MERCK',family:'Diabetes',fam_clave:'DB01',clase:'MEDICAMENTO',ssa:'010.000.5165',sat:'50104400',pres:'CAJA C/30 TABLETAS',iva:0,ieps:0,peso:.09,vol:.14,refrig:false,receta:true,generico:false,
+mp:68.00,mc:38.90,pfarm:64.00,ppub:72.00,margen:42.93,util:29.10,desc_prov:4.0,stock:5,stockMin:15,stockMax:50,reorden:20,ubicacion:'B1-04',lote:'MF2026A',caduc:'2027-11-20',fechaMod:'2026-02-18',
+comp:[{s:'F. del Ahorro',p:55.00,st:1,q:40},{s:'Walmart',p:62.50,st:1,q:25},{s:'F. Guadalajara',p:65.00,st:1,q:20},{s:'F. Benavides',p:70.00,st:1,q:18},{s:'F. Similares',p:45.00,st:1,q:null},{s:'Mercado Libre',p:58.00,st:1,q:null}],
+prov:[{s:'EQUILIBRIO',code:'EQU',c:35.20,lista:38.00,descuento:7.4,bonif:0,neto:35.20,disp:1,multiplo:1,email:'pedidos@equilibrio.com.mx',tel:'800-900-3400',dias_resurt:2},{s:'NADRO',code:'NAD',c:36.80,lista:40.00,descuento:8.0,bonif:0,neto:36.80,disp:1,multiplo:1,email:'pedidos@nadro.com.mx',tel:'800-737-6276',dias_resurt:2},{s:'FANASA',code:'FAN',c:37.50,lista:42.00,descuento:10.7,bonif:0,neto:37.50,disp:1,multiplo:3,email:'ventas@fanasa.com',tel:'55-5089-1700',dias_resurt:3}],
+hist:[{f:'2026-01',p:70.00},{f:'2026-02',p:68.00},{f:'2025-12',p:72.00},{f:'2025-11',p:72.00},{f:'2025-10',p:70.00}]},
+
+{id:'ART005',ean:'7501349024567',clave:'000512',name:'Amoxicilina 500mg c/12 cápsulas',desc:'Antibiótico betalactámico de amplio espectro. Bactericida contra gram+ y gram-.',indic:'Infecciones del tracto respiratorio, urinario, piel y tejidos blandos, otitis media.',contra:'Hipersensibilidad a penicilinas o cefalosporinas. Mononucleosis infecciosa.',brand:'Amoxil',lab:'GSK (GLAXOSMITHKLINE)',family:'Antibióticos',fam_clave:'AB01',clase:'MEDICAMENTO',ssa:'010.000.2127',sat:'50104400',pres:'CAJA C/12 CAPSULAS',iva:0,ieps:0,peso:.05,vol:.10,refrig:false,receta:true,generico:false,
+mp:95.00,mc:55.80,pfarm:90.00,ppub:98.00,margen:41.22,util:39.20,desc_prov:3.5,stock:18,stockMin:10,stockMax:40,reorden:15,ubicacion:'A2-06',lote:'AX2026B',caduc:'2027-04-10',fechaMod:'2026-02-22',
+comp:[{s:'F. Guadalajara',p:88.00,st:1,q:25},{s:'F. Benavides',p:92.00,st:1,q:15},{s:'F. del Ahorro',p:99.00,st:1,q:30},{s:'Walmart',p:85.00,st:1,q:null},{s:'F. Similares',p:72.00,st:1,q:null},{s:'Mercado Libre',p:82.00,st:1,q:null}],
+prov:[{s:'NADRO',code:'NAD',c:50.20,lista:55.00,descuento:8.7,bonif:0,neto:50.20,disp:1,multiplo:1,email:'pedidos@nadro.com.mx',tel:'800-737-6276',dias_resurt:2},{s:'FANASA',code:'FAN',c:53.10,lista:58.00,descuento:8.4,bonif:0,neto:53.10,disp:1,multiplo:2,email:'ventas@fanasa.com',tel:'55-5089-1700',dias_resurt:3},{s:'BIRMEX',code:'BIR',c:49.50,lista:54.00,descuento:8.3,bonif:0,neto:49.50,disp:1,multiplo:1,email:null,tel:null,dias_resurt:5}],
+hist:[{f:'2026-01',p:98.00},{f:'2026-02',p:95.00},{f:'2025-12',p:100.00},{f:'2025-11',p:100.00},{f:'2025-10',p:98.00}]},
+
+{id:'ART006',ean:'7501082217840',clave:'000615',name:'Ibuprofeno 400mg c/10 grageas',desc:'AINE no selectivo. Inhibe ciclooxigenasa (COX-1 y COX-2).',indic:'Dolor, inflamación, fiebre, artritis, dismenorrea, cefalea tensional.',contra:'Úlcera gástrica activa, insuficiencia renal grave, tercer trimestre embarazo.',brand:'Advil',lab:'PFIZER / WYETH',family:'Analgésicos',fam_clave:'AN01',clase:'MEDICAMENTO OTC',ssa:'010.000.0106',sat:'50104400',pres:'CAJA C/10 GRAGEAS',iva:0,ieps:0,peso:.03,vol:.06,refrig:false,receta:false,generico:false,
+mp:42.00,mc:18.90,pfarm:39.00,ppub:45.00,margen:55.00,util:23.10,desc_prov:4.5,stock:65,stockMin:30,stockMax:150,reorden:45,ubicacion:'C1-02',lote:'IB2026A',caduc:'2028-01-20',fechaMod:'2026-02-15',
+comp:[{s:'F. Guadalajara',p:38.50,st:1,q:40},{s:'F. del Ahorro',p:40.00,st:1,q:55},{s:'Walmart',p:36.00,st:1,q:null},{s:'F. Benavides',p:44.00,st:1,q:25},{s:'F. Similares',p:30.00,st:1,q:null}],
+prov:[{s:'NADRO',code:'NAD',c:17.50,lista:20.00,descuento:12.5,bonif:0,neto:17.50,disp:1,multiplo:3,email:'pedidos@nadro.com.mx',tel:'800-737-6276',dias_resurt:2},{s:'SCORPION',code:'SCO',c:16.80,lista:19.00,descuento:11.6,bonif:3.0,neto:16.30,disp:1,multiplo:6,email:'ventas@scorpion.com.mx',tel:'800-505-0505',dias_resurt:1}],
+hist:[{f:'2026-01',p:43.00},{f:'2026-02',p:42.00},{f:'2025-12',p:44.00}]},
+
+{id:'ART007',ean:'7501050610032',clave:'000720',name:'Electrolitos Orales Naranja 4 sobres',desc:'Solución de rehidratación oral. Repone agua y electrolitos perdidos.',indic:'Deshidratación por diarrea, vómito, golpe de calor, ejercicio intenso.',contra:'Insuficiencia renal, obstrucción intestinal.',brand:'Vida Suero Oral',lab:'LABORATORIOS PISA',family:'Hidratación',fam_clave:'HD01',clase:'SUPLEMENTO',ssa:'040.000.0152',sat:'50104400',pres:'CAJA C/4 SOBRES',iva:0,ieps:0,peso:.12,vol:.20,refrig:false,receta:false,generico:false,
+mp:28.00,mc:12.50,pfarm:25.00,ppub:30.00,margen:55.36,util:15.50,desc_prov:6.0,stock:45,stockMin:25,stockMax:100,reorden:35,ubicacion:'D1-03',lote:'VS2026A',caduc:'2027-12-01',fechaMod:'2026-01-30',
+comp:[{s:'F. Guadalajara',p:24.00,st:1,q:60},{s:'F. del Ahorro',p:26.50,st:1,q:40},{s:'Walmart',p:22.00,st:1,q:null},{s:'F. Similares',p:18.00,st:1,q:null}],
+prov:[{s:'NADRO',code:'NAD',c:11.50,lista:13.00,descuento:11.5,bonif:0,neto:11.50,disp:1,multiplo:6,email:'pedidos@nadro.com.mx',tel:'800-737-6276',dias_resurt:2},{s:'SCORPION',code:'SCO',c:10.80,lista:12.50,descuento:13.6,bonif:0,neto:10.80,disp:1,multiplo:12,email:'ventas@scorpion.com.mx',tel:'800-505-0505',dias_resurt:1}],
+hist:[{f:'2026-01',p:28.00},{f:'2026-02',p:28.00}]},
+
+{id:'ART008',ean:'7501298221538',clave:'000825',name:'Atorvastatina 20mg c/30 tabletas',desc:'Estatina. Inhibe HMG-CoA reductasa para reducir colesterol LDL y triglicéridos.',indic:'Hipercolesterolemia, dislipidemia mixta, prevención cardiovascular.',contra:'Enfermedad hepática activa, embarazo, lactancia.',brand:'Lipitor',lab:'PFIZER',family:'Cardiovascular',fam_clave:'CV01',clase:'MEDICAMENTO',ssa:'010.000.5106',sat:'50104400',pres:'CAJA C/30 TABLETAS',iva:0,ieps:0,peso:.07,vol:.13,refrig:false,receta:true,generico:false,
+mp:185.00,mc:98.50,pfarm:178.00,ppub:195.00,margen:46.70,util:86.50,desc_prov:2.8,stock:8,stockMin:10,stockMax:30,reorden:12,ubicacion:'A1-08',lote:'AT2026A',caduc:'2027-08-25',fechaMod:'2026-02-26',
+comp:[{s:'F. Guadalajara',p:172.00,st:1,q:12},{s:'F. del Ahorro',p:169.00,st:1,q:20},{s:'Walmart',p:165.00,st:1,q:null},{s:'F. Benavides',p:189.00,st:1,q:10},{s:'Mercado Libre',p:155.00,st:1,q:null}],
+prov:[{s:'NADRO',code:'NAD',c:95.00,lista:102.00,descuento:6.9,bonif:0,neto:95.00,disp:1,multiplo:1,email:'pedidos@nadro.com.mx',tel:'800-737-6276',dias_resurt:2},{s:'EQUILIBRIO',code:'EQU',c:92.30,lista:100.00,descuento:7.7,bonif:0,neto:92.30,disp:1,multiplo:1,email:'pedidos@equilibrio.com.mx',tel:'800-900-3400',dias_resurt:2}],
+hist:[{f:'2026-01',p:190.00},{f:'2026-02',p:185.00},{f:'2025-12',p:195.00}]}
+],
+
+sources: [
+{id:'S01',name:'F. Guadalajara',type:'comp',hp:95,prods:1847,lr:'2h',st:'ok',icon:'💊',url:'farmaciasguadalajara.com',method:'scraper',enabled:true},
+{id:'S02',name:'F. Benavides',type:'comp',hp:88,prods:1523,lr:'3h',st:'ok',icon:'💊',url:'benavides.com.mx',method:'scraper',enabled:true},
+{id:'S03',name:'F. del Ahorro',type:'comp',hp:92,prods:1650,lr:'4h',st:'ok',icon:'💊',url:'fahorro.com',method:'scraper',enabled:true},
+{id:'S04',name:'Walmart',type:'comp',hp:75,prods:890,lr:'6h',st:'part',icon:'🏪',url:'walmart.com.mx',method:'api',enabled:true},
+{id:'S05',name:'Mercado Libre',type:'mkt',hp:100,prods:2100,lr:'1h',st:'ok',icon:'🛒',url:'mercadolibre.com.mx',method:'api',enabled:true},
+{id:'S06',name:'F. Similares',type:'comp',hp:70,prods:980,lr:'5h',st:'ok',icon:'💊',url:'farmaciassimilares.com.mx',method:'scraper',enabled:true},
+{id:'S07',name:'NADRO',type:'prov',hp:100,prods:3200,lr:'12h',st:'ok',icon:'📦',url:'nadro.com.mx',method:'EDI',enabled:true,prov_code:'NAD'},
+{id:'S08',name:'FANASA',type:'prov',hp:95,prods:2800,lr:'24h',st:'ok',icon:'📦',url:'fanasa.com',method:'archivo',enabled:true,prov_code:'FAN'},
+{id:'S09',name:'EQUILIBRIO',type:'prov',hp:98,prods:1900,lr:'12h',st:'ok',icon:'📦',url:'equilibrio.com.mx',method:'portal',enabled:true,prov_code:'EQU'},
+{id:'S10',name:'SCORPION',type:'prov',hp:90,prods:950,lr:'5h',st:'ok',icon:'🦂',url:'scorpion.com.mx',method:'portal',enabled:true,prov_code:'SCO'},
+{id:'S11',name:'CITYFARMA',type:'prov',hp:82,prods:1100,lr:'8h',st:'ok',icon:'📦',url:'cityfarma.com',method:'archivo',enabled:true,prov_code:'CTF'},
+{id:'S12',name:'BIRMEX',type:'prov',hp:60,prods:450,lr:'48h',st:'warn',icon:'🏥',url:'birmex.gob.mx',method:'manual',enabled:true,prov_code:'BIR'}
+],
+
+promos: [
+{source:'F. Guadalajara',title:'3x2 en Vitaminas y Suplementos',ends:'3 días',cat:'Suplementos',type:'3x2',savings:'~33%'},
+{source:'F. Benavides',title:'20% desc. en Dermatológicos',ends:'5 días',cat:'Dermatología',type:'desc',savings:'20%'},
+{source:'Walmart',title:'Bonificación en Cuidado Personal',ends:'1 día',cat:'Cuidado Personal',type:'bonif',savings:'15%'},
+{source:'F. del Ahorro',title:'2do al 50% en Antigripales',ends:'7 días',cat:'Antigripales',type:'desc',savings:'25%'},
+{source:'Mercado Libre',title:'Envío gratis en Suplementos',ends:'4 días',cat:'Suplementos',type:'envio',savings:'$89 envío'}
+],
+
+providers: [
+{code:'NAD',name:'NADRO',abrev:'NAD',email:'pedidos@nadro.com.mx',tel:'800-737-6276',fax:'',supervisor:'Lic. García',agente:'Carlos Mendoza',desc:6.7,bonif:0,periodo:30,limCredito:50000,saldo:12500,edi:true,dias_resurt:2,dias_max:4,pref:1,reqPedido:true,certPedido:true,actPrecio:true,portal:'https://portal.nadro.com.mx',whatsapp:'5512345678',notas:'Proveedor principal. EDI integrado con SAV.'},
+{code:'FAN',name:'FANASA',abrev:'FAN',email:'ventas@fanasa.com',tel:'55-5089-1700',fax:'55-5089-1701',supervisor:'Ing. López',agente:'María Torres',desc:5.9,bonif:0,periodo:30,limCredito:30000,saldo:8200,edi:false,dias_resurt:3,dias_max:5,pref:2,reqPedido:true,certPedido:false,actPrecio:true,portal:'https://pedidos.fanasa.com',whatsapp:'5598765432',notas:'49% del catálogo. Margen promedio 21.7%.'},
+{code:'EQU',name:'EQUILIBRIO',abrev:'EQU',email:'pedidos@equilibrio.com.mx',tel:'800-900-3400',fax:'',supervisor:'',agente:'Roberto Sánchez',desc:7.4,bonif:0,periodo:15,limCredito:25000,saldo:5100,edi:false,dias_resurt:2,dias_max:3,pref:3,reqPedido:true,certPedido:false,actPrecio:true,portal:'https://equilibrio.com.mx/portal',whatsapp:'5543218765',notas:'Buenos precios en cardiovascular y diabetes.'},
+{code:'SCO',name:'SCORPION ABARROTERO',abrev:'SCO',email:'ventas@scorpion.com.mx',tel:'800-505-0505',fax:'',supervisor:'',agente:'Pedro Ramírez',desc:12.3,bonif:2.0,periodo:15,limCredito:15000,saldo:3200,edi:false,dias_resurt:1,dias_max:2,pref:4,reqPedido:false,certPedido:false,actPrecio:false,portal:'',whatsapp:'5567891234',notas:'Entrega rápida 24h. Mejores precios en OTC.'},
+{code:'CTF',name:'CITYFARMA',abrev:'CTF',email:'ventas@cityfarma.com',tel:'55-1234-5678',fax:'',supervisor:'',agente:'Ana Ruiz',desc:7.2,bonif:1.5,periodo:30,limCredito:20000,saldo:6800,edi:false,dias_resurt:4,dias_max:7,pref:5,reqPedido:true,certPedido:false,actPrecio:true,portal:'',whatsapp:'',notas:'Margen promedio 36.7%. Buen complemento.'},
+{code:'BIR',name:'BIRMEX',abrev:'BIR',email:'','tel':'','fax':'',supervisor:'',agente:'',desc:8.3,bonif:0,periodo:60,limCredito:10000,saldo:0,edi:false,dias_resurt:5,dias_max:10,pref:6,reqPedido:false,certPedido:false,actPrecio:false,portal:'',whatsapp:'',notas:'Solo biológicos y vacunas. Tiempos largos.'}
+]
+};
+
+// ═══ STATE ═══
+var ct='resumen',sp=null,sq='',orderCart={},userLoc=null,nearbyComp=[];
+var NAVITEMS=[
+{id:'resumen',i:'📊',l:'Resumen'},
+{id:'catalogo',i:'📋',l:'Catálogo'},
+{id:'comparar',i:'⚔️',l:'Comparar'},
+{id:'pedidos',i:'📦',l:'Pedidos'},
+{id:'fuentes',i:'🔗',l:'Fuentes'}
+];
+var TABS_FULL=[
+{id:'resumen',i:'📊',l:'Resumen'},
+{id:'catalogo',i:'📋',l:'Catálogo',cnt:DB.products.length},
+{id:'comparar',i:'⚔️',l:'Comparar'},
+{id:'pedidos',i:'📦',l:'Pedidos'},
+{id:'proveedores',i:'🤝',l:'Proveedores',cnt:DB.providers.length},
+{id:'promos',i:'🏷️',l:'Promos',cnt:DB.promos.length},
+{id:'fuentes',i:'🔗',l:'Fuentes',cnt:DB.sources.length},
+{id:'mapa',i:'📍',l:'Mapa'}
+];
+
+// ═══ UTILS ═══
+function $(s){return document.querySelector(s)}
+function $$(s){return document.querySelectorAll(s)}
+function el(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!==undefined)e.innerHTML=h;return e}
+function f2(n){return(+n).toFixed(2)}
+function fk(n){return n>=1000?(n/1000).toFixed(1)+'K':n+''}
+function mg(p,c){return c>0?((p-c)/c*100).toFixed(1):'—'}
+function mgp(p,c){return c>0?((p-c)/p*100).toFixed(1):'—'}
+function hb(sc){var c=sc>=80?'var(--ok)':sc>=50?'var(--wn)':'var(--dn)';return'<div class="hb"><div class="hb-t"><div class="hb-f" style="width:'+sc+'%;background:linear-gradient(90deg,'+c+'88,'+c+');box-shadow:0 0 6px '+c+'40"></div></div><span class="hb-v" style="color:'+c+'">'+sc+'%</span></div>'}
+function pb(my,cp){var d=mgp(my,cp),lo=cp<my,sm=Math.abs(d)<3;var c=sm?'var(--wn)':lo?'var(--ok)':'var(--dn)';return'<span class="pb" style="color:'+c+';background:'+c.replace('var(','rgba(').replace(')',',.1)')+';border:1px solid '+c.replace('var(','rgba(').replace(')',',.2)')+(sm?'">≈':lo?'">↓':'">'+'↑')+' '+Math.abs(d)+'%</span>'}
+function tl(t){return{comp:'Competencia',prov:'Proveedor',mkt:'Marketplace'}[t]||t}
+function stColor(s){return s?'var(--ok)':'var(--dn)'}
+function minComp(p){return p.comp.length?Math.min.apply(null,p.comp.map(function(c){return c.p})):p.mp}
+function bestProv(p){return p.prov.length?p.prov.reduce(function(a,b){return a.neto<b.neto?a:b}):null}
+function stockStatus(p){if(p.stock<=0)return{c:'var(--dn)',t:'SIN STOCK',u:true};if(p.stock<p.stockMin)return{c:'var(--wn)',t:'BAJO',u:true};return{c:'var(--ok)',t:'OK',u:false}}
+function cartCount(){var n=0;for(var k in orderCart)n+=orderCart[k].length;return n}
+function updateTime(){var d=new Date();$('#hdrTime').textContent=d.toLocaleTimeString('es-MX',{hour:'2-digit',minute:'2-digit'})}
+
+// ═══ PWA ═══
+var dp=null;
+window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;var b=$('#pwaIB');if(b)b.style.display='block'});
+window.addEventListener('appinstalled',function(){$('#PWA').classList.remove('show')});
+window.pwaInstall=function(){if(dp){dp.prompt();dp.userChoice.then(function(r){if(r.outcome==='accepted')$('#PWA').classList.remove('show');else pwaDismiss();dp=null})}};
+window.pwaDismiss=function(){try{localStorage.setItem('ikrox_d',Date.now()+'')}catch(e){}$('#PWA').classList.remove('show')};
+function initPWA(){
+  if(window.matchMedia('(display-mode:standalone)').matches||navigator.standalone)return;
+  var ua=navigator.userAgent;
+  if(/iPad|iPhone|iPod/.test(ua)){$('.pi-ios').style.display='block';$('#pwaFeats').style.display='none'}
+  try{var ts=localStorage.getItem('ikrox_d');if(ts&&(Date.now()-parseInt(ts))/86400000<7)return}catch(e){}
+  $('#PWA').classList.add('show');
+}
+
+// ═══ GEOLOCATION ═══
+function requestLocation(){
+  if(!navigator.geolocation)return;
+  navigator.geolocation.getCurrentPosition(function(pos){
+    userLoc={lat:pos.coords.latitude,lng:pos.coords.longitude};
+    nearbyComp=[
+      {name:'F. Guadalajara Tlapacoyan',dist:'350m',addr:'Av. 5 de Mayo 12, Centro',lat:19.9656,lng:-97.1583},
+      {name:'F. del Ahorro Centro',dist:'500m',addr:'Calle Hidalgo 45, Centro',lat:19.9662,lng:-97.1575},
+      {name:'F. Similares Tlapacoyan',dist:'200m',addr:'Av. Revolución 8, Centro',lat:19.9650,lng:-97.1590},
+      {name:'Farmacia Cruz Verde',dist:'1.2km',addr:'Col. Loma Bonita',lat:19.9680,lng:-97.1550}
+    ];
+    if(ct==='resumen'||ct==='mapa')R();
+  },function(){},{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
+}
+
+// ═══ MODAL ═══
+function showModal(title,content){$('#modalTitle').textContent=title;$('#modalBody').innerHTML=content;$('#modalBg').classList.add('show')}
+function hideModal(){$('#modalBg').classList.remove('show')}
+window.closeModal=function(e){if(e.target===e.currentTarget)hideModal()};
+
+// ═══ NOTIFICATIONS ═══
+window.showNotifs=function(){
+  var h='<div class="gm">';
+  h+='<div class="c dng" style="padding:.75rem"><div class="fl"><span>🔴</span><div><div style="font-size:.8rem;font-weight:600;color:#e2e8f0">Walmart bajó Losartán a $76.90</div><div class="pm">Estás $12.60 arriba — tu margen sigue en 41.5%</div></div></div></div>';
+  h+='<div class="c warn" style="padding:.75rem"><div class="fl"><span>🟡</span><div><div style="font-size:.8rem;font-weight:600;color:#e2e8f0">Stock bajo: Metformina (5 uds)</div><div class="pm">Mínimo: 15 · Reorden: 20 · EQUILIBRIO a $35.20</div></div></div></div>';
+  h+='<div class="c warn" style="padding:.75rem"><div class="fl"><span>🟡</span><div><div style="font-size:.8rem;font-weight:600;color:#e2e8f0">Stock bajo: Atorvastatina (8 uds)</div><div class="pm">Mínimo: 10 · Reorden: 12 · EQUILIBRIO a $92.30</div></div></div></div>';
+  h+='<div class="c info" style="padding:.75rem"><div class="fl"><span>🔵</span><div><div style="font-size:.8rem;font-weight:600;color:#e2e8f0">3x2 Vitaminas en Guadalajara</div><div class="pm">Vence en 3 días — oportunidad de igualar</div></div></div></div>';
+  h+='<div class="c" style="padding:.75rem"><div class="fl"><span>📊</span><div><div style="font-size:.8rem;font-weight:600;color:#e2e8f0">NADRO actualizó lista de precios</div><div class="pm">3,200 productos · hace 2 horas</div></div></div></div>';
+  h+='</div>';
+  showModal('Notificaciones (5)',h);
+};
+window.showSettings=function(){showModal('Configuración','<div class="gm"><div class="c" style="padding:.75rem"><div class="fr"><span style="font-size:.82rem">Geolocalización</span><button class="btn btn-sm btn-sc" onclick="requestLocation();hideModal()">Activar 📍</button></div></div><div class="c" style="padding:.75rem"><div class="fr"><span style="font-size:.82rem">Notificaciones push</span><button class="btn btn-sm btn-sc" onclick="Notification.requestPermission()">Activar 🔔</button></div></div><div class="c" style="padding:.75rem"><div class="fr"><span style="font-size:.82rem">Tema visual</span><span class="tag" style="background:rgba(99,102,241,.1);color:var(--pr2)">Midnight</span></div></div><div class="c" style="padding:.75rem"><div class="fr"><span style="font-size:.82rem">Sucursal activa</span><span style="font-size:.82rem;color:var(--tx2)">San Blas — Matriz</span></div></div></div>')};
+window.switchBranch=function(){};
+
+// ═══ NAV ═══
+function nav(){
+  var dt=$('#DT'),bn=$('#BN');dt.innerHTML='';bn.innerHTML='';
+  TABS_FULL.forEach(function(x){
+    var tb=el('button','tab'+(ct===x.id?' on':''),'<em>'+x.i+'</em> '+x.l+(x.cnt?'<span class="cnt">'+x.cnt+'</span>':''));
+    tb.onclick=function(){ct=x.id;sp=null;R()};dt.appendChild(tb);
+  });
+  NAVITEMS.forEach(function(x){
+    var cnt=x.id==='pedidos'&&cartCount()>0?'<span class="badge" style="position:static;border:0;padding:0 3px;font-size:7px;min-width:12px;height:12px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center">'+cartCount()+'</span>':'';
+    var bb=el('button','bn'+(ct===x.id?' on':''),'<em>'+x.i+'</em>'+x.l+cnt+(ct===x.id?'<div class="bn-dot"></div>':''));
+    bb.onclick=function(){ct=x.id;sp=null;R()};bn.appendChild(bb);
+  });
+  var cc=cartCount();$('#notifBadge').textContent=5+(cc>0?'+'+cc:'');
+}
+
+// ═══ PRODUCT DETAIL ═══
+window.showProduct=function(id){sp=DB.products.find(function(p){return p.id===id});ct='comparar';R()};
+window.backToList=function(){sp=null;R()};
+
+// ═══ ADD TO ORDER ═══
+window.addToOrder=function(prodId,provCode,qty){
+  if(!qty||qty<1)qty=1;
+  if(!orderCart[provCode])orderCart[provCode]=[];
+  var existing=orderCart[provCode].find(function(x){return x.prodId===prodId});
+  if(existing){existing.qty+=qty}else{
+    var p=DB.products.find(function(x){return x.id===prodId});
+    var pv=p.prov.find(function(x){return x.code===provCode});
+    if(p&&pv)orderCart[provCode].push({prodId:prodId,name:p.name,ean:p.ean,qty:qty,costo:pv.neto,prov:pv.s,provCode:provCode});
+  }
+  R();
+};
+window.removeFromOrder=function(provCode,prodId){
+  if(orderCart[provCode]){orderCart[provCode]=orderCart[provCode].filter(function(x){return x.prodId!==prodId});if(!orderCart[provCode].length)delete orderCart[provCode]}
+  R();
+};
+
+// ═══ SEND ORDER ═══
+window.sendOrder=function(provCode){
+  var prov=DB.providers.find(function(x){return x.code===provCode});
+  var items=orderCart[provCode];
+  if(!prov||!items||!items.length)return;
+  var total=items.reduce(function(s,i){return s+i.qty*i.costo},0);
+  var body='PEDIDO — Farmacia San Blas%0A%0A';
+  body+='Proveedor: '+prov.name+'%0A';
+  body+='Fecha: '+new Date().toLocaleDateString('es-MX')+'%0A%0A';
+  items.forEach(function(i,idx){body+=(idx+1)+'. '+i.name+' (EAN: '+i.ean+') — Cant: '+i.qty+' — $'+f2(i.costo)+'/u — Subtotal: $'+f2(i.qty*i.costo)+'%0A'});
+  body+='%0A--- TOTAL: $'+f2(total)+' ---';
+  
+  var h='<div class="gm">';
+  h+='<p style="font-size:.85rem;color:var(--tx2);margin-bottom:.75rem">Elige cómo enviar el pedido a <strong style="color:var(--tx)">'+prov.name+'</strong>:</p>';
+  if(prov.email)h+='<a href="mailto:'+prov.email+'?subject=Pedido Farmacia San Blas&body='+body+'" class="c k" style="padding:.75rem;display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--tx)"><span style="font-size:1.3rem">📧</span><div><div style="font-weight:600;font-size:.85rem">Email</div><div class="pm">'+prov.email+'</div></div></a>';
+  if(prov.whatsapp)h+='<a href="https://wa.me/52'+prov.whatsapp+'?text='+body+'" target="_blank" class="c k" style="padding:.75rem;display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--tx)"><span style="font-size:1.3rem">💬</span><div><div style="font-weight:600;font-size:.85rem">WhatsApp</div><div class="pm">+52 '+prov.whatsapp+'</div></div></a>';
+  if(prov.tel)h+='<a href="tel:'+prov.tel+'" class="c k" style="padding:.75rem;display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--tx)"><span style="font-size:1.3rem">📞</span><div><div style="font-weight:600;font-size:.85rem">Teléfono</div><div class="pm">'+prov.tel+'</div></div></a>';
+  if(prov.portal)h+='<a href="'+prov.portal+'" target="_blank" class="c k" style="padding:.75rem;display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--tx)"><span style="font-size:1.3rem">🌐</span><div><div style="font-weight:600;font-size:.85rem">Portal web</div><div class="pm">'+prov.portal+'</div></div></a>';
+  if(prov.edi)h+='<div class="c" style="padding:.75rem"><div class="fl"><span style="font-size:1.3rem">🔗</span><div><div style="font-weight:600;font-size:.85rem">EDI (automático)</div><div class="pm">Integrado con SAV — se envía al confirmar</div></div></div></div>';
+  h+='</div>';
+  showModal('Enviar pedido — '+prov.name,h);
+};
+
+// ═══ ADD SOURCE ═══
+window.analyzeURL=function(){
+  var url=$('#srcURL').value;if(!url)return;
+  showModal('Analizando URL','<div class="empty"><em>🔍</em><p>Analizando estructura de <strong>'+url+'</strong>...</p><div class="ld-bar" style="margin:1rem auto;width:200px"><div class="ld-fill"></div></div><p class="pm">Detectando selectores de productos, precios, disponibilidad y paginación...</p></div>');
+  setTimeout(function(){
+    showModal('Fuente detectada','<div class="gm"><div class="c g" style="padding:.75rem"><div class="sh3">✅ Estructura detectada</div><div class="pm mb05">URL: '+url+'</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem"><div class="tag" style="background:rgba(52,211,153,.1);color:var(--ok)">Productos: detectados</div><div class="tag" style="background:rgba(52,211,153,.1);color:var(--ok)">Precios: detectados</div><div class="tag" style="background:rgba(251,191,36,.1);color:var(--wn)">Stock: parcial</div><div class="tag" style="background:rgba(52,211,153,.1);color:var(--ok)">Paginación: detectada</div></div></div><div class="c" style="padding:.75rem"><div class="sh3">Configuración sugerida</div><div class="pm">Tipo: Scraper HTML · Frecuencia: cada 6h · Proxy: residencial recomendado</div></div><button class="btn btn-pr" style="width:100%;margin-top:.5rem" onclick="hideModal()">+ Agregar fuente</button></div>');
+  },2500);
+};
+
+// ═══ RENDER: RESUMEN ═══
+function vResumen(m){
+  m.innerHTML='';
+  var tt=DB.sources.reduce(function(s,x){return s+x.prods},0);
+  var lowStock=DB.products.filter(function(p){return p.stock<p.stockMin});
+  var cheaperComp=DB.products.reduce(function(s,p){return s+p.comp.filter(function(c){return c.p<p.mp}).length},0);
+  var totalSavings=0;
+  DB.products.forEach(function(p){var bp=bestProv(p);if(bp&&bp.neto<p.mc)totalSavings+=(p.mc-bp.neto)*p.stock});
+
+  // Location banner
+  if(userLoc){m.appendChild(el('div','loc-banner','<em>📍</em>Ubicación activa — '+nearbyComp.length+' competidores detectados cerca<span style="margin-left:auto;font-size:.7rem;opacity:.7">Ver mapa →</span>'));m.lastChild.onclick=function(){ct='mapa';R()}}
+  else{var lb=el('div','loc-banner','<em>📍</em>Activa tu ubicación para detectar competencia cercana');lb.onclick=requestLocation;m.appendChild(lb)}
+
+  // Stats
+  var sg=el('div','sg');
+  [['\u{1F4CA}',fk(tt),'Productos rastreados','+127 hoy','var(--ok)','var(--pr)'],
+   ['\u26A0\uFE0F',cheaperComp,'Más baratos','competidores','var(--dn)','var(--dn)'],
+   ['\u{1F4E6}',lowStock.length,'Stock bajo','productos','var(--wn)','var(--wn)'],
+   ['\u{1F4B0}','$'+fk(Math.round(totalSavings)),'Ahorro potencial','cambio proveedor','var(--ok)','var(--ok)']
+  ].forEach(function(d){
+    var cd=el('div','c si','<div class="si-i" style="background:'+d[5]+'12">'+d[0]+'</div><div><div class="si-v">'+d[1]+'</div><div class="si-l">'+d[2]+'</div><div class="si-c" style="color:'+d[4]+'">'+d[3]+'</div></div>');
+    sg.appendChild(cd);
+  });
+  m.appendChild(sg);
+
+  // Strategic alerts
+  m.appendChild(el('h3','sh','⚡ Alertas estratégicas'));
+  var al=el('div','gs mb15');
+  // Price alerts
+  DB.products.forEach(function(p){
+    var cheap=p.comp.filter(function(c){return c.p<p.mp}).sort(function(a,b){return a.p-b.p});
+    if(cheap.length){
+      var c=cheap[0],diff=f2(p.mp-c.p),pct=mgp(p.mp,c.p);
+      var card=el('div','c dng','<div class="fl"><span style="font-size:1.1rem">🔴</span><div style="flex:1;min-width:0"><div style="font-size:.8rem;font-weight:600;color:#e2e8f0">'+c.s+' tiene <strong>'+p.name.split(' ').slice(0,3).join(' ')+'</strong> a <span class="mono" style="color:var(--ok)">$'+f2(c.p)+'</span></div><div class="pm">Tú: $'+f2(p.mp)+' (+$'+diff+', '+pct+'% arriba) · Tu margen actual: '+mg(p.mp,p.mc)+'%</div><div class="fg mt05"><button class="btn btn-sm btn-pr" onclick="showProduct(\''+p.id+'\')">Ver detalle</button><button class="btn btn-sm btn-sc">Ignorar</button></div></div></div>');
+      card.style.padding='.75rem';al.appendChild(card);
+    }
+  });
+  // Stock alerts
+  lowStock.forEach(function(p){
+    var bp=bestProv(p);
+    var card=el('div','c warn','<div class="fl"><span style="font-size:1.1rem">🟡</span><div style="flex:1;min-width:0"><div style="font-size:.8rem;font-weight:600;color:#e2e8f0"><strong>'+p.name.split(' ').slice(0,3).join(' ')+'</strong> — stock: <span style="color:var(--wn)">'+p.stock+' uds</span> (mín: '+p.stockMin+')</div><div class="pm">Reorden: '+p.reorden+' uds'+(bp?' · '+bp.s+' a $'+f2(bp.neto)+' · Pedido: $'+f2(bp.neto*p.reorden):'')+'</div><div class="fg mt05">'+(bp?'<button class="btn btn-sm btn-ok" onclick="addToOrder(\''+p.id+'\',\''+bp.code+'\','+p.reorden+')">📦 Pedir '+p.reorden+' uds</button>':'')+'<button class="btn btn-sm btn-sc" onclick="showProduct(\''+p.id+'\')">Ver</button></div></div></div>');
+    card.style.padding='.75rem';al.appendChild(card);
+  });
+  // Promo alert
+  var card=el('div','c info','<div class="fl"><span style="font-size:1.1rem">🏷️</span><div><div style="font-size:.8rem;font-weight:600;color:#e2e8f0">'+DB.promos.length+' promociones activas de competencia</div><div class="pm">'+DB.promos.map(function(p){return p.source+': '+p.title}).join(' · ')+'</div></div></div>');
+  card.style.padding='.75rem';al.appendChild(card);
+  m.appendChild(al);
+
+  // Savings recommendations
+  m.appendChild(el('h3','sh','💡 Oportunidades de ahorro'));
+  var sv=el('div','gs mb15');
+  DB.products.forEach(function(p){
+    var bp=bestProv(p);
+    if(bp&&bp.neto<p.mc){
+      var save=f2(p.mc-bp.neto),saveTot=f2((p.mc-bp.neto)*p.stock);
+      sv.appendChild(el('div','c k tip','<div class="fr"><div style="min-width:0;flex:1"><div class="pn">'+p.name.split(' ').slice(0,4).join(' ')+'</div><div class="pm">Cambiar a <strong>'+bp.s+'</strong>: $'+f2(bp.neto)+' vs actual $'+f2(p.mc)+' (ahorras $'+save+'/u)</div></div><div style="text-align:right;flex-shrink:0"><div class="mono bold" style="color:var(--ok);font-size:.95rem">-$'+saveTot+'</div><div class="pm">en stock actual</div></div></div>'));
+    }
+  });
+  if(!sv.children.length)sv.appendChild(el('div','pm','✅ Todos los proveedores actuales son los más competitivos'));
+  m.appendChild(sv);
+
+  // Source health
+  m.appendChild(el('h3','sh','🔗 Estado de fuentes'));
+  var srcG=el('div','sg');
+  DB.sources.slice(0,6).forEach(function(s){
+    srcG.appendChild(el('div','c','<div class="fl" style="margin-bottom:.4rem"><span style="font-size:1.1rem">'+s.icon+'</span><div style="min-width:0"><div style="font-size:.78rem;font-weight:600;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+s.name+'</div></div><div class="dot" style="background:'+(s.st==='ok'?'var(--ok)':s.st==='part'?'var(--wn)':'var(--dn)')+';box-shadow:0 0 5px '+(s.st==='ok'?'var(--ok)':'var(--wn)')+'60;margin-left:auto"></div></div>'+hb(s.hp),''));
+  });
+  m.appendChild(srcG);
+}
+
+// ═══ RENDER: CATÁLOGO ═══
+function vCatalogo(m){
+  m.innerHTML='';
+  var sw=el('div','sw fr mb1','<div class="sbar" style="max-width:none"><span class="sbar-i">🔍</span><input class="inp" id="catSearch" placeholder="Buscar por nombre, EAN, clave, familia..." value="'+sq+'"/></div>');
+  m.appendChild(sw);
+  var chips=el('div','chips mb1');
+  ['Todo','Cardiovascular','Gastrointestinal','Analgésicos','Diabetes','Antibióticos','OTC'].forEach(function(c,i){
+    var ch=el('button','chip'+(i===0?' on':''),c);
+    ch.onclick=function(){$$('.chip').forEach(function(x){x.classList.remove('on')});this.classList.add('on');sq=i===0?'':c;filterCat()};
+    chips.appendChild(ch);
+  });
+  m.appendChild(chips);
+
+  var list=el('div','gm');list.id='catList';m.appendChild(list);
+  filterCat();
+  setTimeout(function(){var i=$('#catSearch');if(i)i.oninput=function(){sq=this.value;filterCat()}},0);
+}
+
+function filterCat(){
+  var ls=$('#catList');if(!ls)return;ls.innerHTML='';
+  var q=sq.toLowerCase();
+  DB.products.filter(function(p){return!q||p.name.toLowerCase().indexOf(q)>-1||p.ean.indexOf(q)>-1||p.clave.indexOf(q)>-1||p.family.toLowerCase().indexOf(q)>-1||p.brand.toLowerCase().indexOf(q)>-1}).forEach(function(p){
+    var ss=stockStatus(p),ch=minComp(p),bp=bestProv(p);
+    var cd=el('div','c k');
+    cd.onclick=function(){showProduct(p.id)};
+    cd.innerHTML='<div class="fr"><div style="min-width:0;flex:1"><div class="fl mb05"><span class="tag" style="background:rgba(99,102,241,.08);color:var(--pr2)">'+p.family+'</span>'+(p.receta?'<span class="tag" style="background:rgba(248,113,113,.08);color:var(--dn)">℞ Receta</span>':'')+(p.generico?'<span class="tag" style="background:rgba(34,211,238,.08);color:var(--ac)">GI</span>':'')+'</div><div class="pn">'+p.name+'</div><div class="pm">'+p.brand+' · '+p.lab.split(' ').slice(0,2).join(' ')+' · EAN: <span class="mono">'+p.ean+'</span></div><div class="pm">Clave SAV: '+p.clave+' · Ubic: '+p.ubicacion+' · Lote: '+p.lote+'</div></div><div style="text-align:right;flex-shrink:0"><div class="pp" style="font-size:1.1rem">$'+f2(p.mp)+'</div><div class="pm">Costo: <span class="mono">$'+f2(p.mc)+'</span></div><div class="pm">Margen: <span style="color:'+(p.margen>20?'var(--ok)':'var(--wn)')+'">'+p.margen.toFixed(1)+'%</span></div><div style="margin-top:4px"><span class="stk" style="background:'+ss.c+'15;color:'+ss.c+'">'+p.stock+' uds · '+ss.t+'</span></div>'+(ch<p.mp?'<div style="margin-top:3px">'+pb(p.mp,ch)+'</div>':'')+'</div></div>';
+    ls.appendChild(cd);
+  });
+}
+
+// ═══ RENDER: COMPARAR ═══
+function vComparar(m){
+  m.innerHTML='';
+  if(sp)return vDetail(m);
+  m.appendChild(el('div','fr mb1','<div class="sbar" style="max-width:none"><span class="sbar-i">🔍</span><input class="inp" id="cmpSearch" placeholder="Buscar producto para comparar..." value="'+sq+'"/></div>'));
+  var list=el('div','gm');list.id='cmpList';m.appendChild(list);
+  filterCmp();
+  setTimeout(function(){var i=$('#cmpSearch');if(i)i.oninput=function(){sq=this.value;filterCmp()}},0);
+}
+
+function filterCmp(){
+  var ls=$('#cmpList');if(!ls)return;ls.innerHTML='';
+  var q=sq.toLowerCase();
+  DB.products.filter(function(p){return!q||p.name.toLowerCase().indexOf(q)>-1||p.ean.indexOf(q)>-1||p.brand.toLowerCase().indexOf(q)>-1}).forEach(function(p){
+    var ch=minComp(p),bp=bestProv(p);
+    var cd=el('div','c k');cd.onclick=function(){sp=p;R()};
+    cd.innerHTML='<div class="fr"><div style="min-width:0;flex:1"><div class="pn">'+p.name+'</div><div class="pm">'+p.brand+' · '+p.comp.length+' competidores · '+p.prov.length+' proveedores</div></div><div style="display:flex;align-items:center;gap:.6rem;flex-shrink:0"><div style="text-align:right"><div class="pp" style="font-size:1rem">$'+f2(p.mp)+'</div><div class="pm">min: $'+f2(ch)+'</div></div>'+pb(p.mp,ch)+'</div></div>';
+    ls.appendChild(cd);
+  });
+}
+
+// ═══ PRODUCT DETAIL ═══
+function vDetail(m){
+  var p=sp;m.innerHTML='';
+  var bb=el('button','bbtn','← Volver');bb.onclick=backToList;m.appendChild(bb);
+
+  // Hero card
+  var hero=el('div','pd-hero');
+  hero.innerHTML='<div class="fl mb05"><span class="pd-ean">EAN: '+p.ean+'</span><span class="tag" style="background:rgba(99,102,241,.08);color:var(--pr2)">'+p.family+'</span>'+(p.receta?'<span class="tag" style="background:rgba(248,113,113,.08);color:var(--dn)">℞ Receta</span>':'')+(p.generico?'<span class="tag" style="background:rgba(34,211,238,.08);color:var(--ac)">Genérico</span>':'')+'</div><div class="pd-name">'+p.name+'</div><div class="pd-brand">'+p.brand+' · '+p.lab+' · '+p.pres+'</div><div class="pd-grid"><div class="pd-stat"><span class="pd-stat-v" style="color:var(--tx)">$'+f2(p.mp)+'</span><span class="pd-stat-l">Mi precio</span></div><div class="pd-stat"><span class="pd-stat-v" style="color:var(--tx2)">$'+f2(p.mc)+'</span><span class="pd-stat-l">Costo actual</span></div><div class="pd-stat"><span class="pd-stat-v" style="color:'+(p.margen>20?'var(--ok)':'var(--wn)')+'">'+p.margen.toFixed(1)+'%</span><span class="pd-stat-l">Margen</span></div><div class="pd-stat"><span class="pd-stat-v" style="color:'+stockStatus(p).c+'">'+p.stock+'</span><span class="pd-stat-l">Stock (mín: '+p.stockMin+')</span></div><div class="pd-stat"><span class="pd-stat-v">$'+f2(p.pfarm)+'</span><span class="pd-stat-l">Precio farmacia</span></div><div class="pd-stat"><span class="pd-stat-v">$'+f2(p.ppub)+'</span><span class="pd-stat-l">P. público sug.</span></div></div>';
+  m.appendChild(hero);
+
+  // Info expandible
+  if(p.desc||p.indic||p.contra){
+    var info=el('div','c mb1');
+    info.innerHTML='<div class="sh3" onclick="this.parentElement.classList.toggle(\'expanded\')" style="cursor:pointer">ℹ️ Información del producto <span style="float:right;font-size:.7rem;color:var(--tx3)">▼</span></div><div class="pm" style="line-height:1.5"><strong>Descripción:</strong> '+p.desc+'<br><strong>Indicaciones:</strong> '+p.indic+'<br><strong>Contraindicaciones:</strong> '+(p.contra||'—')+'<br><strong>Clave SSA:</strong> '+p.ssa+' · <strong>SAT:</strong> '+p.sat+'<br><strong>Ubicación:</strong> '+p.ubicacion+' · <strong>Lote:</strong> '+p.lote+' · <strong>Caducidad:</strong> '+p.caduc+'<br><strong>Peso:</strong> '+p.peso+'kg · <strong>Volumen:</strong> '+p.vol+'L'+(p.refrig?' · ❄️ Refrigerado':'')+'</div>';
+    m.appendChild(info);
+  }
+
+  // Competencia
+  m.appendChild(el('h3','sh','⚔️ Competencia ('+p.comp.length+' fuentes)'));
+  var cl=el('div','gs mb15');
+  p.comp.slice().sort(function(a,b){return a.p-b.p}).forEach(function(c,i){
+    var diff=f2(p.mp-c.p),dc=c.p<p.mp?'var(--ok)':c.p>p.mp?'var(--dn)':'var(--wn)';
+    var cd=el('div','c'+(i===0&&c.p<p.mp?' dng':''));cd.style.padding='.75rem';
+    cd.innerHTML='<div class="fr"><div class="fl"><div class="dot" style="background:'+dc+';box-shadow:0 0 5px '+dc+'40"></div><div><span style="font-size:.85rem;font-weight:600;color:#e2e8f0">'+c.s+'</span>'+(i===0&&c.p<p.mp?'<span class="tag" style="background:rgba(248,113,113,.1);color:var(--dn);margin-left:4px">+ BARATO</span>':'')+'</div></div><div style="display:flex;align-items:center;gap:.6rem"><span class="mono bold" style="font-size:1rem;color:var(--tx)">$'+f2(c.p)+'</span>'+pb(p.mp,c.p)+'<span class="stk" style="background:'+(c.st?'rgba(52,211,153,.08)':'rgba(248,113,113,.08)')+';color:'+(c.st?'var(--ok)':'var(--dn)')+'">'+(c.st?'✓'+(c.q?' '+c.q:''):'✗ Agotado')+'</span></div></div>'+(c.url?'<div class="pm mt05"><a href="'+c.url+'" target="_blank" style="color:var(--ac);font-size:.7rem">🔗 Ver en sitio</a></div>':'');
+    cl.appendChild(cd);
+  });
+  m.appendChild(cl);
+
+  // Proveedores + agregar pedido
+  m.appendChild(el('h3','sh','📦 Proveedores ('+p.prov.length+' cotizaciones)'));
+  var pl=el('div','gs mb15');
+  var bp=bestProv(p);
+  p.prov.slice().sort(function(a,b){return a.neto-b.neto}).forEach(function(pv){
+    var best=bp&&pv.neto===bp.neto,cur=Math.abs(pv.c-p.mc)<1;
+    var m2=mg(p.mp,pv.neto);
+    var cd=el('div','c'+(best?' g':''));cd.style.padding='.75rem';
+    cd.innerHTML='<div class="fr"><div class="fl"><span style="font-size:1rem">📦</span><div><span style="font-size:.85rem;font-weight:600;color:#e2e8f0">'+pv.s+'</span>'+(cur?'<span class="tag" style="background:rgba(255,255,255,.05);color:var(--tx3);margin-left:4px">ACTUAL</span>':'')+(best&&!cur?'<span class="tag" style="background:rgba(52,211,153,.1);color:var(--ok);margin-left:4px">MEJOR</span>':'')+'<div class="pm">Lista: $'+f2(pv.lista)+' · Desc: '+pv.descuento+'%'+(pv.bonif>0?' · Bonif: '+pv.bonif+'%':'')+' · Neto: <span class="mono bold">$'+f2(pv.neto)+'</span></div><div class="pm">'+(pv.disp?'<span style="color:var(--ok)">✓ Disponible</span>':'<span style="color:var(--dn)">✗ No disponible</span>')+' · Múltiplo: '+pv.multiplo+' · Entrega: '+pv.dias_resurt+' días · Margen: <span style="color:'+(parseFloat(m2)>20?'var(--ok)':'var(--wn)')+'">'+m2+'%</span></div></div></div><div class="fg" style="flex-shrink:0"><button class="btn btn-sm btn-pr" onclick="event.stopPropagation();addToOrder(\''+p.id+'\',\''+pv.code+'\','+Math.max(p.reorden,pv.multiplo)+')">📦 Pedir '+(Math.max(p.reorden,pv.multiplo))+'</button>'+(pv.email?'<a href="mailto:'+pv.email+'" class="btn btn-sm btn-sc" onclick="event.stopPropagation()">📧</a>':'')+'</div></div>';
+    pl.appendChild(cd);
+  });
+  m.appendChild(pl);
+
+  // Recommendation
+  if(bp&&bp.neto<p.mc){
+    var save=f2(p.mc-bp.neto),savePct=mgp(p.mc,bp.neto);
+    m.appendChild(el('div','c tip mb1','<div class="fl"><span style="font-size:1.2rem">💡</span><div><div style="font-size:.85rem;font-weight:600;color:var(--ok)">Recomendación de ahorro</div><div style="font-size:.8rem;color:#cbd5e1">Cambiar a <strong>'+bp.s+'</strong> ahorraría <strong style="color:var(--ok)">$'+save+'</strong>/unidad ('+savePct+'% menos). Con stock actual ('+p.stock+' uds) = <strong style="color:var(--ok)">$'+f2((p.mc-bp.neto)*p.stock)+'</strong> de ahorro.</div></div></div>'));
+  }
+
+  // Price history
+  if(p.hist&&p.hist.length){
+    m.appendChild(el('h3','sh','📈 Historial de precio'));
+    var hc=el('div','c mb1');hc.style.padding='.75rem';
+    var maxP=Math.max.apply(null,p.hist.map(function(h){return h.p}));
+    var minH=Math.min.apply(null,p.hist.map(function(h){return h.p}));
+    var range=maxP-minH||1;
+    var bars='<div style="display:flex;align-items:flex-end;gap:4px;height:60px;margin-bottom:.5rem">';
+    p.hist.reverse().forEach(function(h){
+      var pct=((h.p-minH)/range)*100;
+      bars+='<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:2px"><div class="mono" style="font-size:.55rem;color:var(--tx3)">$'+f2(h.p)+'</div><div style="width:100%;height:'+Math.max(10,pct*.5)+'px;background:linear-gradient(180deg,var(--pr),var(--pr)40);border-radius:4px 4px 0 0"></div><div style="font-size:.5rem;color:var(--tx3)">'+h.f.split('-')[1]+'</div></div>';
+    });
+    bars+='</div>';
+    hc.innerHTML=bars;m.appendChild(hc);
+  }
+
+  // Data completeness
+  var fields=[p.desc,p.indic,p.contra,p.ssa,p.sat,p.peso,p.vol,p.lote,p.caduc,p.ubicacion].filter(Boolean).length;
+  var pct=Math.round(fields/10*100);
+  m.appendChild(el('div','','<div class="fr" style="margin-bottom:3px"><span style="font-size:.68rem;color:var(--tx3)">Datos del producto</span><span style="font-size:.68rem;color:var(--tx3)">'+pct+'%</span></div>'+hb(pct)));
+}
+
+// ═══ RENDER: PEDIDOS ═══
+function vPedidos(m){
+  m.innerHTML='';
+  var keys=Object.keys(orderCart);
+  if(!keys.length){
+    m.innerHTML='<div class="empty"><em>📦</em><p>No hay productos en el carrito de pedidos</p><p class="pm">Agrega productos desde el Catálogo o las alertas de stock bajo</p><button class="btn btn-pr" onclick="ct=\'catalogo\';R()">Ir al catálogo</button></div>';
+    return;
+  }
+
+  // Summary total
+  var grandTotal=0,grandItems=0;
+  keys.forEach(function(k){orderCart[k].forEach(function(i){grandTotal+=i.qty*i.costo;grandItems+=i.qty})});
+  m.appendChild(el('div','order-summary mb15','<div class="fr"><div><div style="font-size:.95rem;font-weight:700;font-family:var(--fh)">Resumen de pedidos</div><div class="pm">'+keys.length+' proveedores · '+grandItems+' productos</div></div><div style="text-align:right"><div class="mono bold" style="font-size:1.3rem;color:var(--tx)">$'+f2(grandTotal)+'</div><div class="pm">Total estimado (sin IVA)</div></div></div>'));
+
+  // Per provider
+  keys.forEach(function(provCode){
+    var items=orderCart[provCode];
+    var prov=DB.providers.find(function(x){return x.code===provCode});
+    var total=items.reduce(function(s,i){return s+i.qty*i.costo},0);
+
+    var sec=el('div','c mb1');sec.style.padding='.75rem';
+    var h='<div class="fr mb05"><div class="fl"><span style="font-size:1.1rem">📦</span><div><div style="font-size:.9rem;font-weight:700;color:var(--tx)">'+(prov?prov.name:provCode)+'</div><div class="pm">'+items.length+' productos · Entrega: '+(prov?prov.dias_resurt+'–'+prov.dias_max:'-')+' días</div></div></div><div class="fg"><button class="btn btn-sm btn-pr" onclick="sendOrder(\''+provCode+'\')">📤 Enviar</button></div></div>';
+    h+='<table class="tbl"><thead><tr><th>Producto</th><th>Cant</th><th>Costo</th><th>Subtotal</th><th></th></tr></thead><tbody>';
+    items.forEach(function(i){
+      h+='<tr><td><div class="pn" style="max-width:180px">'+i.name.split(' ').slice(0,4).join(' ')+'</div><div class="pm">EAN: '+i.ean+'</div></td><td class="mono">'+i.qty+'</td><td class="mono">$'+f2(i.costo)+'</td><td class="mono bold">$'+f2(i.qty*i.costo)+'</td><td><button class="btn btn-sm btn-dn" style="padding:2px 6px" onclick="removeFromOrder(\''+provCode+'\',\''+i.prodId+'\')">✕</button></td></tr>';
+    });
+    h+='</tbody></table>';
+    h+='<div class="fr mt05" style="padding-top:.5rem;border-top:1px solid var(--br)"><span style="font-size:.8rem;font-weight:600">Total pedido</span><span class="mono bold" style="font-size:1rem">$'+f2(total)+'</span></div>';
+    sec.innerHTML=h;m.appendChild(sec);
+  });
+
+  // Combined view
+  m.appendChild(el('div','fr','<button class="btn btn-sc" onclick="orderCart={};R()">🗑️ Limpiar todo</button>'));
+}
+
+// ═══ RENDER: PROVEEDORES ═══
+function vProveedores(m){
+  m.innerHTML='';
+  m.appendChild(el('h3','sh2','Directorio de proveedores'));
+  var list=el('div','gm');
+  DB.providers.forEach(function(pv){
+    var cd=el('div','c k');cd.style.padding='.85rem';
+    cd.onclick=function(){showProvDetail(pv)};
+    var prodsCount=DB.products.filter(function(p){return p.prov.some(function(x){return x.code===pv.code})}).length;
+    cd.innerHTML='<div class="fr"><div style="min-width:0;flex:1"><div class="fl mb05"><span style="font-size:1.2rem">📦</span><div style="font-weight:700;font-size:.9rem;color:var(--tx)">'+pv.name+'</div><span class="tag" style="background:rgba(99,102,241,.08);color:var(--pr2)">Pref. #'+pv.pref+'</span></div><div class="pm">'+prodsCount+' productos · Desc: '+pv.desc+'%'+(pv.bonif>0?' · Bonif: '+pv.bonif+'%':'')+' · Entrega: '+pv.dias_resurt+'–'+pv.dias_max+' días</div><div class="pm">Crédito: $'+pv.limCredito.toLocaleString()+' · Saldo: $'+pv.saldo.toLocaleString()+' · Plazo: '+pv.periodo+' días</div></div><div style="flex-shrink:0;text-align:right"><div class="fg">'+(pv.email?'<a href="mailto:'+pv.email+'" class="btn btn-sm btn-sc" onclick="event.stopPropagation()">📧</a>':'')+(pv.whatsapp?'<a href="https://wa.me/52'+pv.whatsapp+'" target="_blank" class="btn btn-sm btn-sc" onclick="event.stopPropagation()">💬</a>':'')+(pv.tel?'<a href="tel:'+pv.tel+'" class="btn btn-sm btn-sc" onclick="event.stopPropagation()">📞</a>':'')+'</div></div></div>';
+    list.appendChild(cd);
+  });
+  m.appendChild(list);
+}
+
+window.showProvDetail=function(pv){
+  var prods=DB.products.filter(function(p){return p.prov.some(function(x){return x.code===pv.code})});
+  var h='<div class="gm"><div class="c" style="padding:.75rem"><div class="sh3">Información de contacto</div><div class="pm" style="line-height:1.8">'+(pv.email?'<strong>Email:</strong> <a href="mailto:'+pv.email+'">'+pv.email+'</a><br>':'')+(pv.tel?'<strong>Tel:</strong> <a href="tel:'+pv.tel+'">'+pv.tel+'</a><br>':'')+(pv.whatsapp?'<strong>WhatsApp:</strong> <a href="https://wa.me/52'+pv.whatsapp+'" target="_blank">+52 '+pv.whatsapp+'</a><br>':'')+(pv.supervisor?'<strong>Supervisor:</strong> '+pv.supervisor+'<br>':'')+(pv.agente?'<strong>Agente:</strong> '+pv.agente+'<br>':'')+(pv.portal?'<strong>Portal:</strong> <a href="'+pv.portal+'" target="_blank">'+pv.portal+'</a><br>':'')+'<strong>EDI:</strong> '+(pv.edi?'✅ Integrado':'❌ No')+'<br><strong>Notas:</strong> '+pv.notas+'</div></div>';
+  h+='<div class="c" style="padding:.75rem"><div class="sh3">Comercial</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem"><div class="pd-stat"><span class="pd-stat-v">'+pv.desc+'%</span><span class="pd-stat-l">Descuento</span></div><div class="pd-stat"><span class="pd-stat-v">'+pv.bonif+'%</span><span class="pd-stat-l">Bonificación</span></div><div class="pd-stat"><span class="pd-stat-v">'+pv.periodo+'d</span><span class="pd-stat-l">Plazo crédito</span></div><div class="pd-stat"><span class="pd-stat-v">$'+fk(pv.limCredito)+'</span><span class="pd-stat-l">Límite crédito</span></div></div></div>';
+  h+='<div class="c" style="padding:.75rem"><div class="sh3">Portal de proveedor</div><div class="pm mb05">Configuración de visibilidad en el portal de este proveedor:</div><div class="gm"><label style="font-size:.8rem;color:var(--tx2);display:flex;align-items:center;gap:6px"><input type="checkbox" checked> Ver solo su lista de pedido</label><label style="font-size:.8rem;color:var(--tx2);display:flex;align-items:center;gap:6px"><input type="checkbox"> Ver precios de otros proveedores</label><label style="font-size:.8rem;color:var(--tx2);display:flex;align-items:center;gap:6px"><input type="checkbox"> Ver catálogo completo</label></div></div>';
+  h+='<div class="c" style="padding:.75rem"><div class="sh3">Productos ('+prods.length+')</div>';
+  prods.forEach(function(p){
+    var pvData=p.prov.find(function(x){return x.code===pv.code});
+    h+='<div class="fr" style="padding:.4rem 0;border-bottom:1px solid var(--br)"><div style="min-width:0"><div class="pn" style="font-size:.78rem">'+p.name+'</div><div class="pm">EAN: '+p.ean+'</div></div><div class="mono" style="font-size:.82rem;flex-shrink:0">$'+f2(pvData.neto)+'</div></div>';
+  });
+  h+='</div></div>';
+  showModal(pv.name+' — Detalle',h);
+};
+
+// ═══ RENDER: PROMOS ═══
+function vPromos(m){
+  m.innerHTML='';
+  m.appendChild(el('h3','sh2','Promociones activas de la competencia'));
+  m.appendChild(el('p','pm mb1','Monitoreo automático de ofertas, descuentos y promociones detectadas por el scraper.'));
+  var list=el('div','gm');
+  DB.promos.forEach(function(p){
+    var d=parseInt(p.ends),urgent=d<=2;
+    var cd=el('div','c'+(urgent?' dng':' info'));cd.style.padding='.85rem';
+    cd.innerHTML='<div class="fr"><div style="min-width:0;flex:1"><div class="fl mb05"><span style="font-size:1rem">'+(p.type==='3x2'?'🎁':p.type==='desc'?'💲':p.type==='bonif'?'💰':'📦')+'</span><div><div style="font-size:.9rem;font-weight:600;color:var(--tx)">'+p.title+'</div><div class="pm">'+p.source+' · Categoría: '+p.cat+' · Ahorro: '+p.savings+'</div></div></div><span class="tag" style="background:'+(urgent?'rgba(248,113,113,.1);color:var(--dn)':'rgba(251,191,36,.1);color:var(--wn)')+'">⏰ '+p.ends+'</span></div>';
+    list.appendChild(cd);
+  });
+  m.appendChild(list);
+}
+
+// ═══ RENDER: FUENTES ═══
+function vFuentes(m){
+  m.innerHTML='';
+  m.appendChild(el('div','fr mb1','<h3 class="sh2" style="margin-bottom:0">Fuentes de datos</h3><button class="btn btn-pr btn-sm" onclick="showAddSource()">+ Agregar</button>'));
+  
+  // Filter chips
+  var chips=el('div','chips mb1');
+  ['Todas','Competencia','Proveedores','Marketplace'].forEach(function(c,i){
+    var ch=el('button','chip'+(i===0?' on':''),c);
+    ch.onclick=function(){$$('.chips .chip').forEach(function(x){x.classList.remove('on')});this.classList.add('on');filterSrc(c)};
+    chips.appendChild(ch);
+  });
+  m.appendChild(chips);
+
+  var list=el('div','gm');list.id='srcList';m.appendChild(list);
+  filterSrc('Todas');
+}
+
+function filterSrc(filter){
+  var ls=$('#srcList');if(!ls)return;ls.innerHTML='';
+  DB.sources.filter(function(s){
+    if(filter==='Todas')return true;
+    if(filter==='Competencia')return s.type==='comp';
+    if(filter==='Proveedores')return s.type==='prov';
+    return s.type==='mkt';
+  }).forEach(function(s){
+    var cd=el('div','c');cd.style.padding='.85rem';
+    cd.innerHTML='<div class="fr"><div class="fl" style="gap:.6rem;min-width:0"><span style="font-size:1.4rem">'+s.icon+'</span><div style="min-width:0"><div class="fl" style="gap:4px"><span style="font-size:.88rem;font-weight:600;color:var(--tx)">'+s.name+'</span><span class="tag" style="background:rgba(99,102,241,.06);color:var(--pr2)">'+tl(s.type)+'</span>'+(s.enabled?'':'<span class="tag" style="background:rgba(248,113,113,.08);color:var(--dn)">DESHABILITADA</span>')+'</div><div class="pm">'+s.prods.toLocaleString()+' productos · Método: '+s.method+' · Última: hace '+s.lr+'</div><div class="pm"><a href="https://'+s.url+'" target="_blank" style="color:var(--ac);font-size:.7rem">🔗 '+s.url+'</a></div></div></div><div style="display:flex;align-items:center;gap:.75rem;flex-shrink:0"><div style="width:70px">'+hb(s.hp)+'</div><div class="dot" style="background:'+(s.st==='ok'?'var(--ok)':s.st==='part'?'var(--wn)':'var(--dn)')+';box-shadow:0 0 5px '+(s.st==='ok'?'var(--ok)':'var(--wn)')+'40"></div></div></div>';
+    ls.appendChild(cd);
+  });
+}
+
+window.showAddSource=function(){
+  showModal('Agregar fuente de datos','<div class="gm"><div class="c" style="padding:.75rem"><div class="sh3">Analizar URL</div><div class="pm mb05">Pega la URL de cualquier farmacia o tienda online. El sistema detectará automáticamente la estructura de productos y precios.</div><div style="display:flex;gap:.4rem"><input class="inp" id="srcURL" placeholder="https://www.farmaciaejemplo.com.mx" style="flex:1"/><button class="btn btn-pr" onclick="analyzeURL()">🔍 Analizar</button></div></div><div class="c" style="padding:.75rem"><div class="sh3">O selecciona un tipo</div><div class="gm"><button class="btn btn-sc" style="width:100%;justify-content:flex-start">💊 Farmacia / Cadena</button><button class="btn btn-sc" style="width:100%;justify-content:flex-start">🛒 Marketplace (ML, Amazon)</button><button class="btn btn-sc" style="width:100%;justify-content:flex-start">📦 Proveedor (lista de precios)</button><button class="btn btn-sc" style="width:100%;justify-content:flex-start">🔗 API pública</button></div></div></div>');
+};
+
+// ═══ RENDER: MAPA ═══
+function vMapa(m){
+  m.innerHTML='';
+  m.appendChild(el('h3','sh2','Competencia cercana'));
+  if(!userLoc){
+    m.innerHTML='<div class="empty"><em>📍</em><p>Activa la geolocalización para detectar farmacias y competencia cerca de tu sucursal</p><button class="btn btn-pr" onclick="requestLocation()">📍 Activar ubicación</button></div>';
+    return;
+  }
+  m.appendChild(el('div','c mb1','<div class="fr"><div><div style="font-size:.82rem;font-weight:600">Tu ubicación</div><div class="pm">Lat: '+userLoc.lat.toFixed(4)+' · Lng: '+userLoc.lng.toFixed(4)+'</div></div><button class="btn btn-sm btn-sc" onclick="requestLocation()">🔄 Actualizar</button></div>'));
+  
+  var list=el('div','gm');
+  nearbyComp.forEach(function(c){
+    list.appendChild(el('div','c k','<div class="fr"><div class="fl"><span style="font-size:1.2rem">💊</span><div><div style="font-size:.85rem;font-weight:600;color:var(--tx)">'+c.name+'</div><div class="pm">'+c.addr+' · <span style="color:var(--ac)">'+c.dist+'</span></div></div></div><a href="https://www.google.com/maps/search/'+encodeURIComponent(c.name)+'" target="_blank" class="btn btn-sm btn-sc" onclick="event.stopPropagation()">🗺️ Mapa</a></div>'));
+  });
+  m.appendChild(list);
+  m.appendChild(el('div','pm mt1','💡 Los precios de competidores cercanos se recopilan automáticamente por el scraper según las fuentes configuradas.'));
+}
+
+// ═══ MAIN RENDER ═══
+function R(){
+  nav();var m=$('#MC');m.innerHTML='';
+  if(ct==='resumen')vResumen(m);
+  else if(ct==='catalogo')vCatalogo(m);
+  else if(ct==='comparar')vComparar(m);
+  else if(ct==='pedidos')vPedidos(m);
+  else if(ct==='proveedores')vProveedores(m);
+  else if(ct==='promos')vPromos(m);
+  else if(ct==='fuentes')vFuentes(m);
+  else if(ct==='mapa')vMapa(m);
+  window.scrollTo(0,0);
+}
+
+// ═══ INIT ═══
+document.addEventListener('DOMContentLoaded',function(){
+  initPWA();
+  updateTime();setInterval(updateTime,30000);
+  requestLocation();
+  R();
+  var ls=$('#LS');
+  if(ls){ls.classList.add('gone');setTimeout(function(){ls.remove()},600)}
+  $('#APP').style.display='block';
+  // Request notification permission after first interaction
+  document.addEventListener('click',function once(){if('Notification' in window&&Notification.permission==='default'){}document.removeEventListener('click',once)},{once:true});
+});
+
+
+})();
+</script>
+</body>
+</html>
